@@ -6,15 +6,7 @@
     "homepage": "http://github.com/facebook/dfuse",
     "license": "BSL-1.0",
     "dependencies": {},
-    "configurations": [{
-        "name": "dfuse-linux",
-        "targetType": "library",
-        "platforms": ["linux"],
-        "libs": ["fuse"]
-    }, {
-        "name": "dfuse-osx",
-        "targetType": "library",
-        "platforms": ["osx"],
-        "libs": ["osxfuse_i32"]
-    }]
+    "libs-linux": ["fuse"],
+    "libs-OSX": ["osxfuse_i32"],
+	"platforms": ["linux", "osx"]
 }
