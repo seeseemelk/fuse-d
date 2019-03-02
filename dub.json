@@ -1,7 +1,7 @@
 {
-    "name": "dfuse",
+    "name": "fuse-d",
     "description": "A D binding for libfuse",
-    "authors": ["David Soria Parra"],
+    "authors": ["David Soria Parra", "Sebastiaan de Schaetzen"],
     "copyright": "Copyright (c) 2014, Facebook, Inc.",
     "homepage": "http://github.com/facebook/dfuse",
     "license": "BSL-1.0",

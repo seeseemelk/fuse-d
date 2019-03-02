@@ -1,5 +1,11 @@
-# dfuse
-*dfuse* is a [D language binding](http://dlang.org) for the high level
+# fuse.d
+*fuse.d* is a fork of the unmaintained *dfuse* library.
+All previous unmerged pull requests have been added to this one,
+and I have done my best to credit the authors in the git history.
+I'm releasing this library under a different name so that both
+*fuse.d* and *dfuse* can co-exist on [the package repository](http://code.dlang.org).
+
+*fuse.d* is a [D language binding](http://dlang.org) for the high level
 [fuse](http://fuse.sourceforge.net) library. It allows to write a fuse
 filesystem for Linux or Mac OS (using [osxfuse](http://osxfuse.github.io)) in D.
 
