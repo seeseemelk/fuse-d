@@ -14,7 +14,7 @@ filesystems are easy to implement and have access to userland components like
 HTTP libraries, etc. For more information about fuse see: http://fuse.sourceforge.net.
 
 ## Examples
-A simple filesystems implementing a directory listing can be found in the [examples/](https://github.com/facebook/dfuse/tree/master/example) directory.
+A simple filesystems implementing a directory listing can be found in the [examples/](https://github.com/seeseemelk/fused/tree/master/example) directory.
 You can build the examples using:
 ```Shell
 $ make examples
@@ -23,9 +23,9 @@ $ ./simplefs /mnt/simplefs
 ```
 
 ## Implementing a filesystem
-dfuse provides a high level interface for libfuse. To implement a filesystem, extend the *Operations* class in the *dfuse.fuse* module:
+dfuse provides a high level interface for libfuse. To implement a filesystem, extend the *Operations* class in the *fused.fuse* module:
 ```D
-import dfuse.fuse;
+import fused.fuse;
 
 class MyFS : Operations
 {
@@ -48,11 +48,11 @@ class MyFS : Operations
 }
 ```
 
-A minimal filesystem implements `Operations.getattr()`, `Operations.readdir()`, `Operations.read()`. See [dfuse/fuse.d](https://github.com/facebook/dfuse/blob/master/source/dfuse/fuse.d) for implementation specific details.
+A minimal filesystem implements `Operations.getattr()`, `Operations.readdir()`, `Operations.read()`. See [fused/fuse.d](https://github.com/seeseemelk/fused/blob/master/source/fused/fuse.d) for implementation specific details.
 
 To mount a filesystem use a Fuse object and call mount:
 ```D
-import dfuse.fuse;
+import fused.fuse;
 
 int main(string[] args)
 {
@@ -65,17 +65,17 @@ int main(string[] args)
 Error conditions are handled by throwin a *FuseException* with the appropriate error number. See `man 3 errno` for more information about errno.
 
 ## Requirements
-dfuse requires:
+fuse.d requires:
 * Mac OS X or Linux
 * fuse >= 2.8.0 or [osxfuse](http://osxfuse.github.io/) >= 2.6.0
 * DMD/Druntime/Phobos >= 2.065
 
-## Building dfuse
-dfuse comes with a standard makefile that assumes that DMD (the D-compiler) is
+## Building fused
+fuse.d comes with a standard makefile that assumes that DMD (the D-compiler) is
 in your $PATH.
 
 ### Linux
-In order to compile dfuse on Linux:
+In order to compile fuse.d on Linux:
 ```Shell
 $ make dfuse
 or
@@ -85,9 +85,9 @@ to build a debug version
 
 ### MacOS
 MacOS supports two inode sizes which are both supported by OSXfuse, however when
-compiling dfuse you have to be aware which OSXfuse should be linked.
+compiling fuse.d you have to be aware which OSXfuse should be linked.
 
-By default dfuse is trying to build with a 32bit inode size and link against
+By default fuse.d is trying to build with a 32bit inode size and link against
 osxfuse_i32 which is part of OSXfuse for compatibility. Please note that your
 library itself will still be 64bit on a 64bit system. The setting only affects
 the size of the inode.
@@ -104,17 +104,17 @@ $ make dfuse ENABLE_64BIT=1
 ```
 
 ### Dub
-dfuse comes with experimental support for [dub](http://code.dlang.org/), a package manager for D. See the dub documentation how to build and use dub.
+fuse.d comes with experimental support for [dub](http://code.dlang.org/), a package manager for D. See the dub documentation how to build and use dub.
 
-## Installing dfuse
-At the moment the dfuse makefile doesn't support an install target. It is
+## Installing fuse.d
+At the moment the fuse.d makefile doesn't support an install target. It is
 recommended to just include the library in a project at this point.
 
-## How dfuse works
-dfuse is a simple D wrapper. It exposes a lowelevel interface to the libfuse C
+## How fuse.d works
+fuse.d is a simple D wrapper. It exposes a lowelevel interface to the libfuse C
 functions in c/fuse/fuse.d. The lowlevel interface preserves C types.
 
-A highlevel interface is provided by fs/fuse.d. The D interface initializes fuse filsystems operations structure and installs it's own handlers. Every dfuse handler converts C
+A highlevel interface is provided by fs/fuse.d. The D interface initializes fuse filsystems operations structure and installs it's own handlers. Every fuse.d handler converts C
 types to D types and is trapping FuseExceptions used for error handling. The
 handlers keep track of the initialized Operations object and call the
 appropriate method once types are converted and pass the result into the D
@@ -125,7 +125,7 @@ default implementations for all handlers and every method can be invidually
 overwritten to provide an interface.
 
 ## Issues and Bugs
-If you encounter issues or bugs with dfuse, please file an issue on [github](https://github.com/facebook/dfuse/issues). Please ensure that you maintain a constructive feedback atmosphere and if possible attach a reproduction step. If you have any questions, feel free to write to the D mailinglist or ask in IRC.
+If you encounter issues or bugs with fuse.d, please file an issue on [github](https://github.com/seeseemelk/fuse.d/issues). Please ensure that you maintain a constructive feedback atmosphere and if possible attach a reproduction step. If you have any questions, feel free to write to the D mailinglist or ask in IRC.
 
 Pull requests are highly appreciated!
 

@@ -7,7 +7,7 @@
  *  of patent rights can be found in the PATENTS file in the same directory.
  *
  */
-module dfuse.fuse;
+module fused.fuse;
 
 /* reexport stat_t */
 public import core.sys.posix.fcntl;
