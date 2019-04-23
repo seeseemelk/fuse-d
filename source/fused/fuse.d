@@ -139,6 +139,26 @@ extern(System)
             })();
     }
 
+    private int dfuse_open(const char* path, fuse_file_info* fi)
+    {
+        return call!(
+            (Operations t)
+            {
+                t.open(path[0..path.strlen]);
+                return 0;
+            })();
+    }
+
+    private int dfuse_release(const char* path, fuse_file_info* fi)
+    {
+        return call!(
+            (Operations t)
+            {
+                t.release(path[0..path.strlen]);
+                return 0;
+            })();
+    }
+
     private int dfuse_read(const char* path, char* buf, size_t size,
                            off_t offset, fuse_file_info* fi)
     {
@@ -384,6 +404,16 @@ export class Operations
         throw new FuseException(errno.EOPNOTSUPP);
     }
 
+    void open(const(char)[] path)
+    {
+        throw new FuseException(errno.EOPNOTSUPP);
+    }
+
+    void release(const(char)[] path)
+    {
+        throw new FuseException(errno.EOPNOTSUPP);
+    }
+
     void exception(Exception e)
     {
     }
@@ -442,6 +472,8 @@ public:
         fops.access = &dfuse_access;
         fops.getattr = &dfuse_getattr;
         fops.readdir = &dfuse_readdir;
+        fops.open = &dfuse_open;
+        fops.release = &dfuse_release;
         fops.read = &dfuse_read;
         fops.write = &dfuse_write;
         fops.truncate = &dfuse_truncate;
