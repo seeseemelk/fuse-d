@@ -11,6 +11,7 @@ module fused.fuse;
 
 /* reexport stat_t */
 public import core.sys.posix.fcntl;
+public import core.sys.posix.utime;
 
 import std.algorithm;
 import std.array;
@@ -262,6 +263,16 @@ extern(System)
         )();
     }
 
+    private int dfuse_utime(const char* path, utimbuf* time) {
+        return call!(
+            (Operations t)
+            {
+                t.utime(path[0 .. path.strlen], time);
+                return 0;
+            }
+        );
+    }
+
     private void* dfuse_init(fuse_conn_info* conn)
     {
         attach();
@@ -401,6 +412,18 @@ export class Operations
         throw new FuseException(errno.EOPNOTSUPP);
     }
 
+    /**
+     * Sets access and modification time.
+     *
+     * Params:
+     *   path = The patch to modify.
+     *   time = The time to set.
+     */
+    void utime(const(char)[] path, utimbuf* time)
+    {
+        throw new FuseException(errno.EOPNOTSUPP);
+    }
+
     void mknod(const(char)[] path, int mod, ulong dev)
     {
         throw new FuseException(errno.EOPNOTSUPP);
@@ -507,6 +530,7 @@ public:
         fops.rmdir = &dfuse_rmdir;
         fops.rename = &dfuse_rename;
         fops.chmod = &dfuse_chmod;
+        fops.utime = &dfuse_utime;
 
         /* Create c-style arguments from a string[] array. */
         auto cargs = array(map!(a => toStringz(a))(args));
