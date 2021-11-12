@@ -273,6 +273,16 @@ extern(System)
         );
     }
 
+    private int dfuse_symlink(const char* target, char* link) {
+        return call!(
+            (Operations t)
+            {
+                t.symlink(target[0 .. target.strlen], link[0 .. link.strlen]);
+                return 0;
+            }
+        );
+    }
+
     private void* dfuse_init(fuse_conn_info* conn)
     {
         attach();
@@ -424,6 +434,18 @@ export class Operations
         throw new FuseException(errno.EOPNOTSUPP);
     }
 
+    /**
+     * Creates a symlink.
+     *
+     * Params:
+     *   path = The path to create.
+     *   target = The target of the link.
+     */
+    void symlink(const(char)[] target, const(char)[] path)
+    {
+        throw new FuseException(errno.EOPNOTSUPP);
+    }
+
     void mknod(const(char)[] path, int mod, ulong dev)
     {
         throw new FuseException(errno.EOPNOTSUPP);
@@ -531,6 +553,7 @@ public:
         fops.rename = &dfuse_rename;
         fops.chmod = &dfuse_chmod;
         fops.utime = &dfuse_utime;
+        fops.symlink = &dfuse_symlink;
 
         /* Create c-style arguments from a string[] array. */
         auto cargs = array(map!(a => toStringz(a))(args));
