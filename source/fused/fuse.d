@@ -252,6 +252,16 @@ extern(System)
             })();
     }
 
+    private int dfuse_chmod(const char* path, mode_t mode) {
+        return call!(
+            (Operations t)
+            {
+                t.chmod(path[0 .. path.strlen], mode);
+                return 0;
+            }
+        )();
+    }
+
     private void* dfuse_init(fuse_conn_info* conn)
     {
         attach();
@@ -379,6 +389,18 @@ export class Operations
         throw new FuseException(errno.EOPNOTSUPP);
     }
 
+    /**
+     * Changes the mode of a path.
+     *
+     * Params:
+     *   path = The path to check.
+     *   mode = The mode to set.
+     */
+    void chmod(const(char)[] path, mode_t mode)
+    {
+        throw new FuseException(errno.EOPNOTSUPP);
+    }
+
     void mknod(const(char)[] path, int mod, ulong dev)
     {
         throw new FuseException(errno.EOPNOTSUPP);
@@ -484,6 +506,7 @@ public:
         fops.mkdir = &dfuse_mkdir;
         fops.rmdir = &dfuse_rmdir;
         fops.rename = &dfuse_rename;
+        fops.chmod = &dfuse_chmod;
 
         /* Create c-style arguments from a string[] array. */
         auto cargs = array(map!(a => toStringz(a))(args));
