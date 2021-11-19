@@ -283,6 +283,16 @@ extern(System)
         );
     }
 
+    private int dfuse_chown(const char* path, uid_t uid, gid_t gid) {
+        return call!(
+            (Operations t)
+            {
+                t.chown(path[0 .. path.strlen], uid, gid);
+                return 0;
+            }
+        );
+    }
+
     private void* dfuse_init(fuse_conn_info* conn)
     {
         attach();
@@ -446,6 +456,19 @@ export class Operations
         throw new FuseException(errno.EOPNOTSUPP);
     }
 
+    /**
+     * Changes ownership of a file.
+     *
+     * Params:
+     *   path = Path to the file.
+     *   uid = New user ID.
+     *   gid = New group ID.
+     */
+    void chown(const(char)[] path, uid_t uid, gid_t gid)
+    {
+        throw new FuseException(errno.EOPNOTSUPP);
+    }
+
     void mknod(const(char)[] path, int mod, ulong dev)
     {
         throw new FuseException(errno.EOPNOTSUPP);
@@ -554,6 +577,7 @@ public:
         fops.chmod = &dfuse_chmod;
         fops.utime = &dfuse_utime;
         fops.symlink = &dfuse_symlink;
+        fops.chown = &dfuse_chown;
 
         /* Create c-style arguments from a string[] array. */
         auto cargs = array(map!(a => toStringz(a))(args));
